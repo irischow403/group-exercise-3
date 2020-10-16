@@ -1,0 +1,63 @@
+---
+title: "Group Exercise 3"
+author: "Tsz Yau Iris Chow"
+date: "10/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+rm(list = ls())
+
+percent = c()
+min_p_list = c()
+
+for (k in 1:100) {
+  # Step 1: Simulate data from a null model
+  mu = 10
+  a = 20
+  n = 100
+  
+  y_list = list()
+  for (i in 1:a) {
+    y_list[[i]] = rnorm(n, 0, 1) + mu
+  }
+  
+  # Step 2: Perform pairwise comparison
+  p_list = c()
+  for ( i in 1:(a-1) ) {
+    for ( j in (i+1):a ) {
+      p_list = c(p_list, t.test(y_list[[i]], y_list[[j]], alternative = "two.sided", mu = 0, var.equal = T)$p.value)
+    }
+  }
+  
+  min_p_list = c(min_p_list, min(p_list))
+  
+}
+
+length(which(min_p_list < 0.05)) / length(min_p_list)
+#(power-1)/-1
+```
+
